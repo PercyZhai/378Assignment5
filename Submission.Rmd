@@ -1,0 +1,111 @@
+---
+title: "Untitled"
+author: "Percy Zhai & Zihao Zheng"
+date: "11/5/2019"
+output: pdf_document
+---
+
+Function A in Python: for and vec
+```{python}
+import numpy as np
+import timeit
+import matplotlib.pyplot as plt
+
+def Stu1FuncAFor(x):
+  mx = np.zeros(10)
+  nx = np.zeros(10)
+  res = np.zeros(10)
+  M = np.random.normal(size = [10,10])
+  N = np.random.normal(size = [10,10])
+  G = np.random.normal(size = 10)
+  for i in range(10):
+    sum = 0
+    for j in range(10):
+      sum += M[i,j]*x[j]
+    mx[i] = sum
+  for i in range(10):
+    sum = 0
+    for j in range(10):
+      sum += N[i,j]*x[j]
+    nx[i] = sum
+  for i in range(10):
+    res[i] = mx[i] + nx[i] + G[i]
+  return res
+  
+def Stu1FuncAVec(x):
+  M = np.random.normal(size = [10,10])
+  N = np.random.normal(size = [10,10])
+  G = np.random.normal(size = 10)
+  res = M.dot(x)+N.dot(x)+G
+  return res
+  
+x = np.zeros(10)
+
+timefor = np.zeros(10000)
+tic = timeit.default_timer()
+for i in range(10000):
+  res1for = Stu1FuncAFor(x)
+  toc = timeit.default_timer()
+  timefor[i] = toc-tic
+plt.plot(timefor, label="ForLoop")
+
+timevec = np.zeros(10000)
+tic = timeit.default_timer()
+for i in range(10000):
+  res1vec = Stu1FuncAVec(x)
+  toc = timeit.default_timer()
+  timevec[i] = toc-tic
+plt.plot(timevec,label="Vector")
+plt.legend()
+```
+
+Function B in R: for and vec
+```{r}
+Stu1FunBFor <- function(x){
+  m3x <- matrix(NA, ncol = 1, nrow = 10)
+  res <- matrix(NA, ncol = 1, nrow = 10)
+  M <- matrix(rnorm(100), ncol = 10, nrow = 10)
+  G <- matrix(rnorm(100), ncol = 1, nrow = 10)
+  for(i in 1:10){
+    sum <- 0
+    for(j in 1:10){
+      sum <- sum + M[i,j]^3*x[j]
+    }
+    m3x[i] <- sum
+  }
+  for(i in 1:10){
+    res[i] = m3x[i] + 3*G[i]
+  }
+  return(res)
+}
+
+Stu1FunBVec <- function(x){
+  M <- matrix(rnorm(100), ncol = 10, nrow = 10)
+  G <- matrix(rnorm(100), ncol = 1, nrow = 10)
+  res <- (M**3)%*%x + 3*G
+  return(res)
+}
+
+x <- matrix(1, ncol = 1, nrow = 10)
+
+timefor <- vector("numeric", 10000)
+tic <- Sys.time()
+for(i in 1:10000){
+  resBfor <- Stu1FunBFor(x)
+  toc <- Sys.time()
+  timefor[i] <- toc - tic
+}
+
+timevec <- vector("numeric", 10000)
+tic <- Sys.time()
+for(i in 1:10000){
+  resBvec <- Stu1FunBVec(x)
+  toc <- Sys.time()
+  timevec[i] <- toc - tic
+}
+
+plot(timefor,type="l",col = 2)
+lines(timevec, col = 3)
+legend(1,1.5,legend=c("RED: For","GREEN: Vec"))
+```
+
