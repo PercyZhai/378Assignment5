@@ -10,11 +10,23 @@ data(wine, package="rattle")
 wein <- wine[-1]
 wein$cat <- integer(length(wein[,1]))
 central <- wein[sample(1:178,3),]
-for(i in length(wein[,1])){
-  d1 <- dist(rbind(wein[i,],central[1,]))
-  d2 <- dist(rbind(wein[i,],central[2,]))
-  d3 <- dist(rbind(wein[i,],central[3,]))
-  wein$cat[i] <- which.min(c(d1,d2,d3))
+zentrum <- matrix(NA, ncol=14, nrow=3)
+
+for(zeit in 1:100){
+  print(paste("Zeit",zeit))
+  for(i in 1:length(wein[,1])){
+    d1 <- dist(rbind(wein[i,-14],central[1,-14]))
+    d2 <- dist(rbind(wein[i,-14],central[2,-14]))
+    d3 <- dist(rbind(wein[i,-14],central[3,-14]))
+    wein$cat[i] <- as.integer(which.min(c(d1,d2,d3)))
+  }
+  dist <- numeric(3)
+  for(j in 1:3){
+    zentrum[j,] <- as.numeric(central[j,])
+    central[j,] <- colMeans(wein[which(wein$cat==j),])
+    dist[j] <- dist(rbind(zentrum[j,],central[j,]))
+  }
+  if(max(dist) < 0.1) break
 }
 ```
 
