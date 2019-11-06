@@ -121,3 +121,100 @@ points(timevec, col = 3, pch=20)
 legend("topleft",c("For Loop","Vec"), fill = c("red","green"))
 ```
 
+Function A in R: for and vec
+```{r}
+X = matrix(rnorm(10),nrow=10)
+Std2FuncA_for<-function(X){
+  M<-matrix(rnorm(100),nrow=10)
+  N<-matrix(rnorm(100),nrow=10)
+  G<-matrix(rnorm(10),nrow=10)
+  R<-matrix(rep(0,10),nrow=10)
+  for (i in 1:10){
+    for (j in 1:10){
+      R[i] = R[i]+M[i,j]*X[j]+N[i,j]*X[j]
+    }
+    R[i] = R[i] + G[i]
+  }
+  return(R)
+}
+
+Std2FuncA_vec<-function(X){
+  M<-matrix(rnorm(100),nrow=10)
+  N<-matrix(rnorm(100),nrow=10)
+  G<-matrix(rnorm(10),nrow=10)
+  R<-M%*%X+N%*%X+G
+  return(R)
+}
+
+timefor=rep(0,100)
+timevec=rep(0,100)
+for(i in 1:100){
+  tic1=Sys.time()
+  for(j in 1:i){
+    a = Std2FuncA_for(X)
+  }
+  timefor[i] = Sys.time()-tic1
+}
+
+for(i in 1:100){
+  tic2=Sys.time()
+  for (j in 1:i){
+    b = Std2FuncA_vec(X)
+  }
+  timevec[i] = Sys.time()-tic2
+}
+plot(timefor,col = 2, main = "Function A in R",xlab = "Number of calculations",ylab = "Time taken / s",pch = 20)
+points(timevec, col = 3, pch = 20)
+legend("topleft",c("For Loop","Vec"), fill = c("red","green"))
+```
+
+Function B in python: for and vec
+```{python}
+import timeit
+import numpy as np
+import matplotlib.pyplot as plt
+X = np.random.normal(size = [10,1]);
+def Std2FuncB_for(X):
+  R = np.zeros(10);
+  M_3 = np.zeros([10,10]);
+  M = np.random.normal(size = [10,10]);
+  G = np.random.normal(size = 10);
+  for i in range(10):
+    for j in range(10):
+      M_3[i,j] = M[i,j]*M[i,j]*M[i,j];
+  for i in range(10):
+    for j in range(10):
+      R[i] = R[i] + M_3[i,j] * X[j];
+    R[i]=R[i]+3*G[i];  
+  return(R);
+
+def Std2FuncB_vec(X):
+  M = np.random.normal(size = [10,10]);
+  G = np.random.normal(size = 10);
+  M_3 = M**3;
+  R = M_3.dot(X)+3*G;
+  return(R);
+
+timefor=np.zeros(1000);
+timevec=np.zeros(1000);
+X = np.random.normal(size = [10,1]);
+
+for i in range(1000):
+  tic=timeit.default_timer();
+  for j in range(i):
+    a = Std2FuncB_for(X);
+  timefor[i] = timeit.default_timer()-tic;
+plt.scatter(range(1000),timefor,label="ForLoop")
+
+
+for i in range(1000):
+  tic=timeit.default_timer();
+  for j in range(i):
+    b = Std2FuncB_vec(X);
+  timevec[i] = timeit.default_timer()-tic;
+plt.scatter(range(1000),timevec,label="Vector")
+plt.legend()
+plt.xlabel("Number of calculations")
+plt.ylabel("Time taken / s")
+plt.title("Function B in Python")
+```
