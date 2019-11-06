@@ -5,7 +5,7 @@ date: "11/5/2019"
 output: pdf_document
 ---
 
-Function A in Python: for and vec
+Function 1 in Python: for and vec
 ```{python}
 import numpy as np
 import timeit
@@ -39,24 +39,31 @@ def Stu1FuncAVec(x):
   res = M.dot(x)+N.dot(x)+G
   return res
   
+
 x = np.zeros(10)
+looprange = 1000
 
-timefor = np.zeros(10000)
-tic = timeit.default_timer()
-for i in range(10000):
-  res1for = Stu1FuncAFor(x)
+timefor = np.zeros(looprange)
+for j in range(looprange):
+  tic = timeit.default_timer()
+  for i in range(j):
+    res1for = Stu1FuncAFor(x)
   toc = timeit.default_timer()
-  timefor[i] = toc-tic
-plt.plot(timefor, label="ForLoop")
+  timefor[j] = toc-tic
+plt.scatter(range(1,looprange+1),timefor, label="ForLoop")
 
-timevec = np.zeros(10000)
-tic = timeit.default_timer()
-for i in range(10000):
-  res1vec = Stu1FuncAVec(x)
+timevec = np.zeros(looprange)
+for j in range(looprange):
+  tic = timeit.default_timer()
+  for i in range(j):
+    res1vec = Stu1FuncAVec(x)
   toc = timeit.default_timer()
-  timevec[i] = toc-tic
-plt.plot(timevec,label="Vector")
+  timevec[j] = toc-tic
+plt.scatter(range(1,looprange+1),timevec,label="Vector")
 plt.legend()
+plt.xlabel("Number of calculations")
+plt.ylabel("Time taken / s")
+plt.title("Function A in Python")
 ```
 
 Function B in R: for and vec
@@ -88,24 +95,29 @@ Stu1FunBVec <- function(x){
 
 x <- matrix(1, ncol = 1, nrow = 10)
 
-timefor <- vector("numeric", 10000)
-tic <- Sys.time()
-for(i in 1:10000){
-  resBfor <- Stu1FunBFor(x)
+timefor <- vector("numeric", 1000)
+for(j in 1:1000){
+  tic <- Sys.time()
+  for(i in 1:j){
+    resBfor <- Stu1FunBFor(x)
+  }
   toc <- Sys.time()
   timefor[i] <- toc - tic
 }
 
-timevec <- vector("numeric", 10000)
-tic <- Sys.time()
-for(i in 1:10000){
+
+timevec <- vector("numeric", 1000)
+for(j in 1:1000){
+  tic <- Sys.time()
+  for(i in 1:j){
   resBvec <- Stu1FunBVec(x)
+  }
   toc <- Sys.time()
   timevec[i] <- toc - tic
 }
 
-plot(timefor,type="l",col = 2)
-lines(timevec, col = 3)
-legend(1,1.5,legend=c("RED: For","GREEN: Vec"))
+plot(timefor,col = 2, main = "Function B in R",xlab = "Number of calculations",ylab = "Time taken / s")
+points(timevec, col = 3)
+legend("topleft",c("For Loop","Vec"), fill = c("red","green"))
 ```
 
