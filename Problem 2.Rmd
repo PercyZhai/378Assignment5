@@ -6,14 +6,13 @@ output: pdf_document
 ---
 
 ```{r}
+library(fpc)
 data(wine, package="rattle")
 wein <- wine[-1]
 wein$cat <- integer(length(wein[,1]))
 central <- wein[sample(1:178,3),]
 zentrum <- matrix(NA, ncol=14, nrow=3)
-
 for(zeit in 1:100){
-  print(paste("Zeit",zeit))
   for(i in 1:length(wein[,1])){
     d1 <- dist(rbind(wein[i,-14],central[1,-14]))
     d2 <- dist(rbind(wein[i,-14],central[2,-14]))
@@ -28,6 +27,7 @@ for(zeit in 1:100){
   }
   if(max(dist) < 0.1) break
 }
+plotcluster(wein[-14], wein$cat)
 ```
 
 
