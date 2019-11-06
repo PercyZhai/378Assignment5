@@ -1,0 +1,21 @@
+---
+title: "Problem 2"
+author: "Percy Zhai & Zach Zheng"
+date: "11/5/2019"
+output: pdf_document
+---
+
+```{r}
+data(wine, package="rattle")
+wein <- wine[-1]
+wein$cat <- integer(length(wein[,1]))
+central <- wein[sample(1:178,3),]
+for(i in length(wein[,1])){
+  d1 <- dist(rbind(wein[i,],central[1,]))
+  d2 <- dist(rbind(wein[i,],central[2,]))
+  d3 <- dist(rbind(wein[i,],central[3,]))
+  wein$cat[i] <- which.min(c(d1,d2,d3))
+}
+```
+
+
