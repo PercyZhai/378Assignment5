@@ -1,3 +1,8 @@
 # 378Assignment5
 
-Please see "submission.rmd" for submitted part of the assignment.
+# Problem 1
+Please see "Problem 1.rmd" for the collaborated part of problem 1.
+"Problem 1.pdf" is the knitted version of problem 1.
+
+# Problem 2
+Please see "Problem 2 Percy.rmd" for Percy's solution on Problem 2.
