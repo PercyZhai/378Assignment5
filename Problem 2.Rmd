@@ -27,6 +27,7 @@ for(zeit in 1:100){
   }
   if(max(dist) < 0.1) break
 }
+print(paste("Number of iterations:",zeit))
 plotcluster(wein[-14], wein$cat)
 ```
 
